@@ -52,19 +52,28 @@ module keyNoCutout() {
     translate([0,9,0])raisedPart();
 
     // the little inner bars by the hook
-    translate([13.7,0,0])cube([1,4,14]);
-    translate([13.7,7,0])cube([1,4,14]);
+    barwidth=3.3;
+    translate([13.7,0,0])cube([1,barwidth,14]);
+    translate([13.7,11 - barwidth,0])cube([1,barwidth,14]);
 
     // the hook
     translate([19,3.5,0])cube([2,4,14]);
     translate([17,3.5,12])cube([2,4,2]);
     // support fin
     translate([21,5.5,0])cube([2,1,10]);
+    translate([21,5.5,0])cube([3,1,7]);
+    translate([21,5.5,0])cube([5,1,5]);
+    translate([21,5.5,0])cube([7,1,3]);
+    translate([21,5.5,0])cube([11,1,3]);
 
 
     // plungers that actually press the actuators
+    // I'm making them thicker, because at 1mm thickness they snap way too easily.
     translate([47,2,0])cube([1,7,18]);
+    translate([46,2,0])cube([3,7,16.5]);
+
     translate([54,2,0])cube([1,7,18]);
+    translate([53,2,0])cube([3,7,16.5]);
 }
 
 module keywellCutout() {
