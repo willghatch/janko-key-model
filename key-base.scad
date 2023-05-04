@@ -1,7 +1,6 @@
 
 // Key interface for M-audio keystation 49e.
 
-// Make the keys at least 70mm long, which is long enough to be a bit past all of the interface elements.
 
 // prism taken from openscad user manual
 module prismBorrowed(l, w, h){
@@ -17,14 +16,17 @@ module tprism(l,w,h){
 
 module keyNoCutout() {
     // key top, upside down
-    cube([70,11,2]);
+    // The key base needs to be 110mm long to go past the stopper.
+    keyBaseLength=110;
+    keyBaseWidth=11;
+    cube([keyBaseLength,keyBaseWidth,2]);
 
     // key sides, basic part
-    translate([0,0,0])cube([70,2,10]);
-    translate([0,9,0])cube([70,2,10]);
+    translate([0,0,0])cube([keyBaseLength,2,10]);
+    translate([0,9,0])cube([keyBaseLength,2,10]);
 
     // key well outside
-    cube([10,11,10]);
+    cube([10,keyBaseWidth,10]);
 
     module raisedPart() {
         // raised part
@@ -54,17 +56,17 @@ module keyNoCutout() {
     // the little inner bars by the hook
     barwidth=3.3;
     translate([13.7,0,0])cube([1,barwidth,14]);
-    translate([13.7,11 - barwidth,0])cube([1,barwidth,14]);
+    translate([13.7,keyBaseWidth - barwidth,0])cube([1,barwidth,14]);
 
     // the hook
     translate([19,3.5,0])cube([2,4,14]);
     translate([17,3.5,12])cube([2,4,2]);
     // support fin
-    translate([21,5.5,0])cube([2,1,10]);
-    translate([21,5.5,0])cube([3,1,7]);
-    translate([21,5.5,0])cube([5,1,5]);
-    translate([21,5.5,0])cube([7,1,3]);
-    translate([21,5.5,0])cube([11,1,3]);
+    translate([21,5,0])cube([2,1,10]);
+    translate([21,5,0])cube([3,1,7]);
+    translate([21,5,0])cube([5,1,5]);
+    translate([21,5,0])cube([7,1,3]);
+    translate([21,5,0])cube([11,1,3]);
 
 
     // plungers that actually press the actuators
