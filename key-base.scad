@@ -9,18 +9,19 @@ fullWhiteKeyLength=160;
 userAreaOffset=fullWhiteKeyLength - 135;
 
 
+// prism taken from openscad user manual
+module prismBorrowed(l, w, h){
+    polyhedron(//pt 0        1        2        3        4        5
+        points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
+        faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]]
+        );
+}
+module tprism(l,w,h){
+    rotate([0,0,90])prismBorrowed(l,w,h);
+}
+
 module keybase(){
 
-// prism taken from openscad user manual
-    module prismBorrowed(l, w, h){
-        polyhedron(//pt 0        1        2        3        4        5
-            points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
-            faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]]
-            );
-    }
-    module tprism(l,w,h){
-        rotate([0,0,90])prismBorrowed(l,w,h);
-    }
 
 
     module keyNoCutout() {
@@ -84,6 +85,18 @@ module keybase(){
 
         translate([54,2,0])cube([1,7,19]);
         translate([53,2,0])cube([3,7,18]);
+
+
+        // bottom hook -- IE the underside part farthest from the spring that keeps the key from rising up past its “neutral” point.
+        // There are 44mm between the original far-from-spring 1mm plunger and the bottom hook.
+        // The bottom hook closes maybe 1mm beyond where the plungers extend.
+        // This is a bit of a wide bridge, so hopefully it works.  I'm going to pull in each side by 0.5mm which I think I can fit.
+        bridgeHeightOffset = 5;
+        // After trying to make the bridge 1mm thinner, the gap was too small and the key couldn't move freely.  If anything, I need to make the bridge wider...
+        bridgeThinner = -0.1;
+        translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([5, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
+        translate([54 + 1 + 44, keyBaseWidth - 2 - bridgeThinner, bridgeHeightOffset])cube([5, 2 + bridgeThinner ,22 - bridgeHeightOffset]);
+        translate([54 + 1 + 44, 0,20])cube([5,keyBaseWidth,2]);
     }
 
     module keywellCutout() {
@@ -110,7 +123,7 @@ module keybase(){
         keywellCutout();
         // rectangle hole
         // TODO - this is unnecessary, it's probably there for their manufacturing process.  Maybe I should remove this hole.
-        translate([15,1.5,-0.01])cube([4,8,12]);
+        //translate([15,1.5,-0.01])cube([4,8,12]);
         // the cover goes just beyond this, eg. 5mm.  I should give probably ~10cm before any key.
     }
 
@@ -224,15 +237,19 @@ module padPeg(offset) {
     //translate([fullWhiteKeyLength - (20 + 23 * 2),0,-20])pad();
 }
 
-//translate([0,(keyBaseWidth + 1) * -3, 0])padPeg(offset=1);
-//translate([0,(keyBaseWidth + 1) * -5, 0])padPeg(offset=2);
-//translate([0,(keyBaseWidth + 1) * -7, 0])padPeg(offset=3);
-//translate([0,(keyBaseWidth + 1) * -9, 0])padPeg(offset=4);
-//
-//translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
-//translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
-//
-//translate([0,(keyBaseWidth + 1) * 3,0])topRowKey();
-//translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKey();
-//translate([0,(keyBaseWidth + 1) * 5,0])topRowKey();
-//translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKey();
+module demo() {
+    // IE a function to visualize everything
+    translate([0,(keyBaseWidth + 1) * -3, 0])padPeg(offset=1);
+    translate([0,(keyBaseWidth + 1) * -5, 0])padPeg(offset=2);
+    translate([0,(keyBaseWidth + 1) * -7, 0])padPeg(offset=3);
+    translate([0,(keyBaseWidth + 1) * -9, 0])padPeg(offset=4);
+
+    translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
+    translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
+
+    translate([0,(keyBaseWidth + 1) * 3,0])topRowKey();
+    translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKey();
+    translate([0,(keyBaseWidth + 1) * 5,0])topRowKey();
+    translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKey();
+}
+//demo();
