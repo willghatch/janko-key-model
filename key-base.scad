@@ -4,6 +4,8 @@
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
 keyBaseWidth=11;
+keyWallWidth=2;
+keyInnerWidth = keyBaseWidth - keyWallWidth;
 // Full white key length is 160mm.  135mm is the “user area” where the pads can be.
 fullWhiteKeyLength=160;
 userAreaOffset=fullWhiteKeyLength - 135;
@@ -29,8 +31,8 @@ module keybase(){
         cube([keyBaseLength,keyBaseWidth,2]);
 
         // key sides, basic part
-        translate([0,0,0])cube([keyBaseLength,2,10]);
-        translate([0,9,0])cube([keyBaseLength,2,10]);
+        translate([0,0,0])cube([keyBaseLength,keyWallWidth,10]);
+        translate([0,keyInnerWidth,0])cube([keyBaseLength,keyWallWidth,10]);
 
         // key well outside
         cube([10,keyBaseWidth,10]);
@@ -65,29 +67,35 @@ module keybase(){
         translate([13.7,0,0])cube([1,barwidth,14]);
         translate([13.7,keyBaseWidth - barwidth,0])cube([1,barwidth,14]);
 
-        // the hook
-        translate([19,3.5,0])cube([2,4,14]);
-        translate([17,3.5,12])cube([2,4,2]);
-        // TODO - the hook can be wider.  It just has to bend a tiny bit.
-        // support fin
-        // I'm discovering that the support fin is crucial.  The hook is what prevents the key from being pulled back TOO far.  Alternatively (or in addition), I could design something that goes below the stopper.  The white keys have two lower hook things, one of which his the upper stopper (and the lower one seems... irrelevant.  I don't understand it -- it doesn't hit the lower stopper on the way down or on the way up, it just doesn't hit anything).  If I put on the front lower hook, the back hook might even be unnecessary.  It will certainly be less of a critical failure point.
-        translate([21,4,0])cube([2,3,13]);
-        translate([21,4,0])cube([3,3,10]);
-        translate([21,4,0])cube([5,3,8]);
-        translate([21,4,0])cube([7,3,5]);
-        translate([21,4,0])cube([11,3,3]);
+        //////////// the back hook
+        union() {
+            translate([19,3.5,0])cube([2,4,14]);
+            //// Because the hook has an overhang, it tends to snag.  Now that I've added the bottom front hook, I'm not certain that the back hook is completely necessary.
+            // hook overhang
+            //translate([17,3.5,12])cube([2,4,2]);
+            //// TODO - the hook can be wider.  It just has to bend a tiny bit.
+            // support fin
+            // I'm discovering that the support fin is crucial.  The hook is what prevents the key from being pulled back TOO far.  Alternatively (or in addition), I could design something that goes below the stopper.  The white keys have two lower hook things, one of which his the upper stopper (and the lower one seems... irrelevant.  I don't understand it -- it doesn't hit the lower stopper on the way down or on the way up, it just doesn't hit anything).  If I put on the front lower hook, the back hook might even be unnecessary.  It will certainly be less of a critical failure point.
+            translate([21,4,0])cube([2,3,13]);
+            translate([21,4,0])cube([3,3,10]);
+            translate([21,4,0])cube([5,3,8]);
+            translate([21,4,0])cube([7,3,5]);
+            translate([21,4,0])cube([11,3,3]);
+        }
+
 
 
         // plungers that actually press the actuators
         // I'm making them thicker, because at 1mm thickness they snap way too easily.
-        translate([47,2,0])cube([1,7,19]);
-        translate([46,2,0])cube([3,7,18]);
+        plungerHeight = 18.5;
+        translate([47,2,0])cube([1,7,plungerHeight]);
+        translate([46,2,0])cube([3,7,plungerHeight-1]);
 
-        translate([54,2,0])cube([1,7,19]);
-        translate([53,2,0])cube([3,7,18]);
+        translate([54,2,0])cube([1,7,plungerHeight]);
+        translate([53,2,0])cube([3,7,plungerHeight-1]);
 
 
-        // bottom hook -- IE the underside part farthest from the spring that keeps the key from rising up past its “neutral” point.
+        // bottom front hook -- IE the underside part farthest from the spring that keeps the key from rising up past its “neutral” point.
         // There are 44mm between the original far-from-spring 1mm plunger and the bottom hook.
         // The bottom hook closes maybe 1mm beyond where the plungers extend.
         // This is a bit of a wide bridge, so hopefully it works.  I'm going to pull in each side by 0.5mm which I think I can fit.
@@ -130,34 +138,39 @@ module keybase(){
 }
 
 
+padX = 16;
+padY = 18;
+padRoundExtra = 2;
+padFullX = padX + padRoundExtra * 2;
+padFullY = padY + padRoundExtra * 2;
 
-// First pass design, pads are 22x22 squares
 module pad() {
-    padHeight = 3;
+    // Pad is "centered" such that if you translate it the same amount as a pad peg hole the pads will be at the same X,Y position.
+    padZ = 3;
     translate([0,-5.25,0])
-    translate([2,2,0])
+    translate([2,2,0]) // center relative to minkowsky effect
     minkowski() {
-        cube([17.5,17.5,padHeight]);
-        cylinder(h=0.1, r=2, center=true, $fn=50);
+        cube([padX,padY,padZ]);
+        cylinder(h=0.01, r=padRoundExtra, center=true, $fn=50);
     }
 }
 
-
-module bottomRowKey() {
-    keybase();
-
-    // extend key base
-    translate([50,0,0])cube([fullWhiteKeyLength-50,keyBaseWidth,2]);
-    translate([50,0,0])cube([fullWhiteKeyLength-50,2,10]);
-    translate([50,9,0])cube([fullWhiteKeyLength-50,2,10]);
-
-    translate([fullWhiteKeyLength - 20,0,0])pad();
-    translate([fullWhiteKeyLength - (20 + 23 * 2) + 4,0,-20])cube([12, keyBaseWidth, 20]);
-    translate([fullWhiteKeyLength - (20 + 23 * 2),0,-20])pad();
-    translate([fullWhiteKeyLength - (20 + 23 * 4) + 4,0,-40])cube([12, keyBaseWidth, 40]);
-    translate([fullWhiteKeyLength - (20 + 23 * 4),0,-40])pad();
+pegSize = keyBaseWidth - 4;
+module padPegHole() {
+    // "centered" similar to pad.
+    translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 2.5]);
 }
 
+module padPeg(offset) {
+    // "centered" similar to pad.
+    pad();
+    translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, 10 * offset]);
+    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, 10 * offset + 2]);
+}
+
+
+bottomPadOffset = fullWhiteKeyLength - 13;
+interPadOffset = padFullX + 4;
 
 module bottomRowKeyWithHoles() {
     difference(){
@@ -168,74 +181,46 @@ module bottomRowKeyWithHoles() {
             translate([50,0,0])cube([fullWhiteKeyLength-50,keyBaseWidth,2]);
             translate([50,0,0])cube([fullWhiteKeyLength-50,2,10]);
             translate([50,9,0])cube([fullWhiteKeyLength-50,2,10]);
+            translate([fullWhiteKeyLength, 0,0])cube([2,keyBaseWidth,10]);
 
-            translate([fullWhiteKeyLength - 20,0,0])pad();
-
-            // hole perimiter
-            // My first try at this put one of the hole perimiters over the key depression stopper, so I need to move it forward about 7mm or re-design.
-            // If I can't use this design and avoid the holes, an alternative is a hole with no front/back holders, and a shallow peg, then superglue.
-            //translate([fullWhiteKeyLength - (20 + 23 * 2) + 6,0,0])cube([2,keyBaseWidth,10]);
-            //translate([fullWhiteKeyLength - (20 + 23 * 2) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
-
-            //translate([fullWhiteKeyLength - (20 + 23 * 4) + 6,0,0])cube([2,keyBaseWidth,10]);
-            //translate([fullWhiteKeyLength - (20 + 23 * 4) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            translate([bottomPadOffset,0,0])pad();
         }
-        translate([fullWhiteKeyLength - (20 + 23 * 2) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
-        translate([fullWhiteKeyLength - (20 + 23 * 4) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
+        translate([bottomPadOffset - interPadOffset * 2, 0,0])padPegHole();
+        translate([bottomPadOffset - interPadOffset * 4, 0,0])padPegHole();
     }
-    //translate([fullWhiteKeyLength - (20 + 23 * 2) + 4,0,-20])cube([12, keyBaseWidth, 20]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 2),0,-20])pad();
-    //translate([fullWhiteKeyLength - (20 + 23 * 4) + 4,0,-40])cube([12, keyBaseWidth, 40]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 4),0,-40])pad();
 }
 
-module topRowKey() {
-    keybase();
-
-    // extend key base
-    translate([50,0,0])cube([fullWhiteKeyLength-50 - 27,keyBaseWidth,2]);
-    translate([50,0,0])cube([fullWhiteKeyLength-50 - 27,2,10]);
-    translate([50,9,0])cube([fullWhiteKeyLength-50 - 27,2,10]);
-
-    translate([fullWhiteKeyLength - (20 + 23 * 1) + 4,0,-10])cube([12, keyBaseWidth, 10]);
-    translate([fullWhiteKeyLength - (20 + 23 * 1),0,-10])pad();
-    translate([fullWhiteKeyLength - (20 + 23 * 3) + 4,0,-30])cube([12, keyBaseWidth, 30]);
-    translate([fullWhiteKeyLength - (20 + 23 * 3),0,-30])pad();
-}
 
 module topRowKeyWithHoles() {
     difference(){
         union(){
             keybase();
             // extend key base
-            translate([50,0,0])cube([fullWhiteKeyLength-50 - 23,keyBaseWidth,2]);
-            translate([50,0,0])cube([fullWhiteKeyLength-50 - 23,2,10]);
-            translate([50,9,0])cube([fullWhiteKeyLength-50 - 23,2,10]);
-
-            // hole perimiter
-            //translate([fullWhiteKeyLength - (20 + 23 * 1) + 6,0,0])cube([2,keyBaseWidth,10]);
-            //translate([fullWhiteKeyLength - (20 + 23 * 1) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
-
-            //translate([fullWhiteKeyLength - (20 + 23 * 3) + 6,0,0])cube([2,keyBaseWidth,10]);
-            //translate([fullWhiteKeyLength - (20 + 23 * 3) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            translate([50,0,0])cube([fullWhiteKeyLength-50 - 15,keyBaseWidth,2]);
+            translate([50,0,0])cube([fullWhiteKeyLength-50 - 15,2,10]);
+            translate([50,9,0])cube([fullWhiteKeyLength-50 - 15,2,10]);
+            translate([fullWhiteKeyLength-15, 0,0])cube([2,keyBaseWidth,10]);
         }
-        translate([fullWhiteKeyLength - (20 + 23 * 1) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
-        translate([fullWhiteKeyLength - (20 + 23 * 3) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
+        translate([bottomPadOffset - interPadOffset * 1, 0,0])padPegHole();
+        translate([bottomPadOffset - interPadOffset * 3, 0,0])padPegHole();
+        translate([bottomPadOffset - interPadOffset * 5, 0,0])padPegHole();
     }
-
-    //translate([fullWhiteKeyLength - (20 + 23 * 1) + 4,0,-10])cube([12, keyBaseWidth, 10]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 1),0,-10])pad();
-    //translate([fullWhiteKeyLength - (20 + 23 * 3) + 4,0,-30])cube([12, keyBaseWidth, 30]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 3),0,-30])pad();
 }
 
-module padPeg(offset) {
-    pad();
-    translate([4,0,0])cube([12, keyBaseWidth, 10 * offset]);
-    translate([8,2,0])cube([keyBaseWidth-4, keyBaseWidth-4, 10 * offset + 2]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 2) + 4,0,-20])cube([12, keyBaseWidth, 20]);
-    //translate([fullWhiteKeyLength - (20 + 23 * 2),0,-20])pad();
+
+// TODO - these key modules are useful for visualizing - but I need to make them as keyWithHole plus pegs.
+module bottomRowKeyFilled() {
+    bottomRowKeyWithHoles();
+    translate([bottomPadOffset - interPadOffset * (2 + 0), 0, -10 * 2])mirror([0,0,0])padPeg(2);
+    translate([bottomPadOffset - interPadOffset * (4 + 0), 0, -10 * 4])mirror([0,0,0])padPeg(4);
 }
+module topRowKeyFilled() {
+    topRowKeyWithHoles();
+    translate([bottomPadOffset - interPadOffset * (1 + 0), 0, -10 * 1])mirror([0,0,0])padPeg(1);
+    translate([bottomPadOffset - interPadOffset * (3 + 0), 0, -10 * 3])mirror([0,0,0])padPeg(3);
+    translate([bottomPadOffset - interPadOffset * (5 + 0), 0, -10 * 5])mirror([0,0,0])padPeg(5);
+}
+
 
 module demo() {
     // IE a function to visualize everything
@@ -247,9 +232,15 @@ module demo() {
     translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
     translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
 
-    translate([0,(keyBaseWidth + 1) * 3,0])topRowKey();
-    translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKey();
-    translate([0,(keyBaseWidth + 1) * 5,0])topRowKey();
-    translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKey();
+    translate([0,(keyBaseWidth + 1) * 3,0])topRowKeyFilled();
+    translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKeyFilled();
+    translate([0,(keyBaseWidth + 1) * 5,0])topRowKeyFilled();
+    translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKeyFilled();
 }
 //demo();
+
+//difference(){
+//    pad();
+//    padPegHole();
+//}
+//translate([10,50,0])padPeg(offset=2);
