@@ -41,9 +41,9 @@ module keybase(){
             translate([25,0,10])rotate([0,0,0])tprism(2,2,5);
 
             // triangle-ish bit
-            translate([7+3, 2, 10+5])rotate([0,0,180])tprism(2,1,3);
-            translate([7 + 4, 0, 10 + 5])cube([1,2,3]);
-            translate([7+6, 0, 10+5])rotate([0,0,0])tprism(2,1,3);
+            translate([7+3, 2, 10+5])rotate([0,0,180])tprism(2,1,2.5);
+            translate([7 + 4, 0, 10 + 5])cube([1,2,2.5]);
+            translate([7+6, 0, 10+5])rotate([0,0,0])tprism(2,1,2.5);
 
             // rectangle with rounded bit
             //translate([7 + 7, 0, 10 + 5]) intersection(){
@@ -51,9 +51,9 @@ module keybase(){
             //  translate([1.2,2,1.2])rotate([90,0,0])cylinder(h=2, r=1, center=false, $fn=40);
             //}
             translate([7 + 7, 0, 10 + 5]) union(){
-                cube([2.5,2,2]);
-                cube([2,2,2.5]);
-                translate([2.5,0,2])tprism(2,0.5,0.5);
+                cube([2.5,2,1.5]);
+                cube([2,2,2]);
+                translate([2.5,0,1.5])tprism(2,0.5,0.5);
             }
         }
         raisedPart();
@@ -68,20 +68,21 @@ module keybase(){
         translate([19,3.5,0])cube([2,4,14]);
         translate([17,3.5,12])cube([2,4,2]);
         // support fin
-        translate([21,5,0])cube([2,1,10]);
-        translate([21,5,0])cube([3,1,7]);
-        translate([21,5,0])cube([5,1,5]);
-        translate([21,5,0])cube([7,1,3]);
-        translate([21,5,0])cube([11,1,3]);
+        // I'm discovering that the support fin is crucial.  The hook is what prevents the key from being pulled back TOO far.  Alternatively (or in addition), I could design something that goes below the stopper, which is what the black keys have.
+        translate([21,4,0])cube([2,3,13]);
+        translate([21,4,0])cube([3,3,10]);
+        translate([21,4,0])cube([5,3,8]);
+        translate([21,4,0])cube([7,3,5]);
+        translate([21,4,0])cube([11,3,3]);
 
 
         // plungers that actually press the actuators
         // I'm making them thicker, because at 1mm thickness they snap way too easily.
-        translate([47,2,0])cube([1,7,18]);
-        translate([46,2,0])cube([3,7,16.5]);
+        translate([47,2,0])cube([1,7,19]);
+        translate([46,2,0])cube([3,7,18]);
 
-        translate([54,2,0])cube([1,7,18]);
-        translate([53,2,0])cube([3,7,16.5]);
+        translate([54,2,0])cube([1,7,19]);
+        translate([53,2,0])cube([3,7,18]);
     }
 
     module keywellCutout() {
@@ -156,11 +157,13 @@ module bottomRowKeyWithHoles() {
             translate([fullWhiteKeyLength - 20,0,0])pad();
 
             // hole perimiter
-            translate([fullWhiteKeyLength - (20 + 23 * 2) + 6,0,0])cube([2,keyBaseWidth,10]);
-            translate([fullWhiteKeyLength - (20 + 23 * 2) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            // My first try at this put one of the hole perimiters over the key depression stopper, so I need to move it forward about 7mm or re-design.
+            // If I can't use this design and avoid the holes, an alternative is a hole with no front/back holders, and a shallow peg, then superglue.
+            //translate([fullWhiteKeyLength - (20 + 23 * 2) + 6,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 2) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
 
-            translate([fullWhiteKeyLength - (20 + 23 * 4) + 6,0,0])cube([2,keyBaseWidth,10]);
-            translate([fullWhiteKeyLength - (20 + 23 * 4) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 4) + 6,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 4) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
         }
         translate([fullWhiteKeyLength - (20 + 23 * 2) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
         translate([fullWhiteKeyLength - (20 + 23 * 4) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
@@ -195,11 +198,11 @@ module topRowKeyWithHoles() {
             translate([50,9,0])cube([fullWhiteKeyLength-50 - 23,2,10]);
 
             // hole perimiter
-            translate([fullWhiteKeyLength - (20 + 23 * 1) + 6,0,0])cube([2,keyBaseWidth,10]);
-            translate([fullWhiteKeyLength - (20 + 23 * 1) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 1) + 6,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 1) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
 
-            translate([fullWhiteKeyLength - (20 + 23 * 3) + 6,0,0])cube([2,keyBaseWidth,10]);
-            translate([fullWhiteKeyLength - (20 + 23 * 3) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 3) + 6,0,0])cube([2,keyBaseWidth,10]);
+            //translate([fullWhiteKeyLength - (20 + 23 * 3) + 6 + keyBaseWidth-2,0,0])cube([2,keyBaseWidth,10]);
         }
         translate([fullWhiteKeyLength - (20 + 23 * 1) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
         translate([fullWhiteKeyLength - (20 + 23 * 3) + 8, 2,-0.1])cube([keyBaseWidth-4,keyBaseWidth-4, 2.5]);
@@ -214,7 +217,7 @@ module topRowKeyWithHoles() {
 module padPeg(offset) {
     pad();
     translate([4,0,0])cube([12, keyBaseWidth, 10 * offset]);
-    translate([8,2,0])cube([keyBaseWidth-4, keyBaseWidth-4, 10 * offset + 10]);
+    translate([8,2,0])cube([keyBaseWidth-4, keyBaseWidth-4, 10 * offset + 2]);
     //translate([fullWhiteKeyLength - (20 + 23 * 2) + 4,0,-20])cube([12, keyBaseWidth, 20]);
     //translate([fullWhiteKeyLength - (20 + 23 * 2),0,-20])pad();
 }
@@ -227,9 +230,7 @@ module padPeg(offset) {
 //translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
 //translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
 //
-////translate([0,(keyBaseWidth + 1) * 1,0])topRowKey();
-////translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKey();
 //translate([0,(keyBaseWidth + 1) * 3,0])topRowKey();
 //translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKey();
-////translate([0,(keyBaseWidth + 1) * 5,0])topRowKey();
-////translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKey();
+//translate([0,(keyBaseWidth + 1) * 5,0])topRowKey();
+//translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKey();
