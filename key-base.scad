@@ -67,8 +67,9 @@ module keybase(){
         // the hook
         translate([19,3.5,0])cube([2,4,14]);
         translate([17,3.5,12])cube([2,4,2]);
+        // TODO - the hook can be wider.  It just has to bend a tiny bit.
         // support fin
-        // I'm discovering that the support fin is crucial.  The hook is what prevents the key from being pulled back TOO far.  Alternatively (or in addition), I could design something that goes below the stopper, which is what the black keys have.
+        // I'm discovering that the support fin is crucial.  The hook is what prevents the key from being pulled back TOO far.  Alternatively (or in addition), I could design something that goes below the stopper.  The white keys have two lower hook things, one of which his the upper stopper (and the lower one seems... irrelevant.  I don't understand it -- it doesn't hit the lower stopper on the way down or on the way up, it just doesn't hit anything).  If I put on the front lower hook, the back hook might even be unnecessary.  It will certainly be less of a critical failure point.
         translate([21,4,0])cube([2,3,13]);
         translate([21,4,0])cube([3,3,10]);
         translate([21,4,0])cube([5,3,8]);
@@ -108,6 +109,7 @@ module keybase(){
         keyNoCutout();
         keywellCutout();
         // rectangle hole
+        // TODO - this is unnecessary, it's probably there for their manufacturing process.  Maybe I should remove this hole.
         translate([15,1.5,-0.01])cube([4,8,12]);
         // the cover goes just beyond this, eg. 5mm.  I should give probably ~10cm before any key.
     }
