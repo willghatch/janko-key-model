@@ -11,6 +11,24 @@ fullWhiteKeyLength=160;
 userAreaOffset=fullWhiteKeyLength - 135;
 
 
+padRoundExtra = 2;
+padHexCenterToEdge = 8;
+//padX = 2 * padHexCenterToEdge * 1.1547;
+//padY = 2 * padHexCenterToEdge;
+//padX = 16;
+//padY = 18;
+//padFullX = padX + padRoundExtra * 2;
+//padFullY = padY + padRoundExtra * 2;
+
+padX = 19;
+padY = 22;
+padFullX = padX;
+padFullY = padY;
+
+bottomPadOffset = fullWhiteKeyLength - 10;
+interPadOffset = padFullX + 4;
+//interPadOffset = padFullX + 0;
+
 // prism taken from openscad user manual
 module prismBorrowed(l, w, h){
     polyhedron(//pt 0        1        2        3        4        5
@@ -138,21 +156,33 @@ module keybase(){
 }
 
 
-padX = 16;
-padY = 18;
-padRoundExtra = 2;
-padFullX = padX + padRoundExtra * 2;
-padFullY = padY + padRoundExtra * 2;
 
 module pad() {
     // Pad is "centered" such that if you translate it the same amount as a pad peg hole the pads will be at the same X,Y position.
     padZ = 3;
-    translate([0,-5.25,0])
-    translate([2,2,0]) // center relative to minkowsky effect
-    minkowski() {
-        cube([padX,padY,padZ]);
-        cylinder(h=0.01, r=padRoundExtra, center=true, $fn=50);
-    }
+
+    // I would like a pad that is tilted so that the end higher to the player is higher, so if the keyboard is tilted up at the back, the player pressing down is a down+forward direction at the key pad.  But this seems difficult to design here.  Maybe I'll design an add-on part that I can glue on top of the pad.  Then I can eg. add bumps for different notes, and print them in different colors.
+
+    // squarish pad version
+    //color("green")
+    //translate([0,-5.25,0])
+    //translate([2,2,0]) // center relative to minkowsky effect
+    //minkowski() {
+    //    cube([padX,padY,padZ]);
+    //    cylinder(h=0.01, r=padRoundExtra, center=true, $fn=50);
+    //}
+
+    // hex pad version
+    //poly_n = 6;
+    //translate([padFullX / 2, keyBaseWidth / 2, 0])
+    //minkowski() {
+    //    cylinder(r=padHexCenterToEdge /cos(180/poly_n), $fn=poly_n, center=false);
+    //    cylinder(h=0.01, r=padRoundExtra, center=true, $fn=50);
+    //}
+
+    // oval pad version
+    translate([padX/2,keyBaseWidth/2,0])
+    scale([padX/2,padY/2,1])cylinder(r=1, $fn=50, center=false);
 }
 
 pegSize = keyBaseWidth - 4;
@@ -161,16 +191,29 @@ module padPegHole() {
     translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 2.5]);
 }
 
+function padZOffset(row) =
+    row == 0 ? 0 :
+    row == 1 ? 10 :
+    row == 2 ? 10 + 9 :
+    row == 3 ? 10 + 9 + 8 :
+    row == 4 ? 10 + 9 + 8 + 7 :
+    row == 5 ? 10 + 9 + 8 + 7 + 6 :
+    60;
+
+
 module padPeg(offset) {
     // "centered" similar to pad.
+
+    // The top key of a previous print only moves down by ~4mm when depressed, but moves forward ~5mm.
+    //color("green")
     pad();
-    translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, 10 * offset]);
-    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, 10 * offset + 2]);
+    zOff = padZOffset(offset);
+    translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
+    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
+    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
 }
 
 
-bottomPadOffset = fullWhiteKeyLength - 13;
-interPadOffset = padFullX + 4;
 
 module bottomRowKeyWithHoles() {
     difference(){
@@ -211,14 +254,14 @@ module topRowKeyWithHoles() {
 // TODO - these key modules are useful for visualizing - but I need to make them as keyWithHole plus pegs.
 module bottomRowKeyFilled() {
     bottomRowKeyWithHoles();
-    translate([bottomPadOffset - interPadOffset * (2 + 0), 0, -10 * 2])mirror([0,0,0])padPeg(2);
-    translate([bottomPadOffset - interPadOffset * (4 + 0), 0, -10 * 4])mirror([0,0,0])padPeg(4);
+    translate([bottomPadOffset - interPadOffset * (2 + 0), 0, -padZOffset(2)])mirror([0,0,0])padPeg(2);
+    translate([bottomPadOffset - interPadOffset * (4 + 0), 0, -padZOffset(4)])mirror([0,0,0])padPeg(4);
 }
 module topRowKeyFilled() {
     topRowKeyWithHoles();
-    translate([bottomPadOffset - interPadOffset * (1 + 0), 0, -10 * 1])mirror([0,0,0])padPeg(1);
-    translate([bottomPadOffset - interPadOffset * (3 + 0), 0, -10 * 3])mirror([0,0,0])padPeg(3);
-    translate([bottomPadOffset - interPadOffset * (5 + 0), 0, -10 * 5])mirror([0,0,0])padPeg(5);
+    translate([bottomPadOffset - interPadOffset * (1 + 0), 0, -padZOffset(1)])mirror([0,0,0])padPeg(1);
+    translate([bottomPadOffset - interPadOffset * (3 + 0), 0, -padZOffset(3)])mirror([0,0,0])padPeg(3);
+    translate([bottomPadOffset - interPadOffset * (5 + 0), 0, -padZOffset(5)])mirror([0,0,0])padPeg(5);
 }
 
 
