@@ -1,13 +1,23 @@
 
 // Key interface for M-audio keystation 49e.
+// Looking around online I also want to find other keyboards that may be compatible:
+// • M-audio code 49 looks like it has the same or similar keys with back spring from this video https://www.youtube.com/watch?v=ah3o2PHlj2U but I can't see the sit-on-bed contact.
+// • The M-Audio Axiom Pro 49 looks like it is very similar, but may need some tweaks to the trapezoid area (where it rests on the bed near the spring).  (Based on a youtube video: https://www.youtube.com/watch?v=0EXhBHUBSy0).  On another video I see the M-Audio Axiom 61 has the same spring mechanism, but I can't see the key interface -- probably it is like the M-Audio Axiom Pro 49... (based from https://www.youtube.com/watch?v=KjNV4O8UoOk).
+// • The M-Audio Keystation 61es looks like it has the same keys, based on https://www.youtube.com/watch?v=rw7M5bsJpx8 (which shows dissasembly of the keystation 49e)
+// • The M-Audio Keystation Pro-88 looks like it has similar keys, but they have a different spring, and maybe 2 springs, but I can't tell for sure.  Definitely I would need a different model, but probably similar.  (From https://youtu.be/f-iIatuSr-s?t=56)
+// • These keys that have the same spring but a different sit-on-the-bed contact, it looks like they are SIMPLER -- eg. a big groove instead of tiny teeth.  So it should actually be a lot easier to design the contact point for them.
+
+// The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.
 
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
 keyBaseWidth=11;
 keyWallWidth=2;
 keyInnerWidth = keyBaseWidth - keyWallWidth;
+pegSize = keyBaseWidth - 4;
 // Full white key length is 160mm.  135mm is the “user area” where the pads can be.
 fullWhiteKeyLength=160;
+extraBottomRowLength=pegSize/2;
 userAreaOffset=fullWhiteKeyLength - 135;
 
 
@@ -17,11 +27,13 @@ padHexCenterToEdge = 8;
 //padY = 2 * padHexCenterToEdge;
 //padX = 16;
 //padY = 18;
+//padZ = 3;
 //padFullX = padX + padRoundExtra * 2;
 //padFullY = padY + padRoundExtra * 2;
 
 padX = 19;
 padY = 22;
+padZ = 1;
 padFullX = padX;
 padFullY = padY;
 
@@ -119,7 +131,9 @@ module keybase(){
         // This is a bit of a wide bridge, so hopefully it works.  I'm going to pull in each side by 0.5mm which I think I can fit.
         bridgeHeightOffset = 5;
         // After trying to make the bridge 1mm thinner, the gap was too small and the key couldn't move freely.  If anything, I need to make the bridge wider...
-        bridgeThinner = -0.1;
+        //bridgeThinner = -0.1;
+        // Trying anything to adjust the bridge was a mistake.  It catches on the pad.
+        bridgeThinner = 0;
         translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([5, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
         translate([54 + 1 + 44, keyBaseWidth - 2 - bridgeThinner, bridgeHeightOffset])cube([5, 2 + bridgeThinner ,22 - bridgeHeightOffset]);
         translate([54 + 1 + 44, 0,20])cube([5,keyBaseWidth,2]);
@@ -159,7 +173,6 @@ module keybase(){
 
 module pad() {
     // Pad is "centered" such that if you translate it the same amount as a pad peg hole the pads will be at the same X,Y position.
-    padZ = 3;
 
     // I would like a pad that is tilted so that the end higher to the player is higher, so if the keyboard is tilted up at the back, the player pressing down is a down+forward direction at the key pad.  But this seems difficult to design here.  Maybe I'll design an add-on part that I can glue on top of the pad.  Then I can eg. add bumps for different notes, and print them in different colors.
 
@@ -182,22 +195,25 @@ module pad() {
 
     // oval pad version
     translate([padX/2,keyBaseWidth/2,0])
-    scale([padX/2,padY/2,1])cylinder(r=1, $fn=50, center=false);
+    scale([padX/2,padY/2,1])cylinder(r=1, h=padZ, $fn=50, center=false);
 }
 
-pegSize = keyBaseWidth - 4;
 module padPegHole() {
     // "centered" similar to pad.
     translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 2.5]);
 }
 
 function padZOffset(row) =
-    row == 0 ? 0 :
-    row == 1 ? 10 :
-    row == 2 ? 10 + 9 :
-    row == 3 ? 10 + 9 + 8 :
-    row == 4 ? 10 + 9 + 8 + 7 :
-    row == 5 ? 10 + 9 + 8 + 7 + 6 :
+    // The vertical distance that the pads move depends on their row, where 0 is the farthest from the spring/back/axis of rotation.
+    // I want them offset so that when depressed, the key is just above or near the keys on the next row.
+    // Because I plan to put a ~5mm thick angled topper on each pad, that means that the top of the bottom part of the key will be higher than the top part of the lower row key by a bit extra that I need to factor in..
+    // The farthest pads move about 10mm vertically
+    row == 0 ? 5 :
+    row == 1 ? 14 : // This row still has a lot of vertical motion, so it need a big jump to clear.  Maybe this means I should actually have holes in all of them and raise even the bottom one a bit...
+    row == 2 ? 14 + 7.5 :
+    row == 3 ? 14 + 7.5 + 5 :
+    row == 4 ? 14 + 7.5 + 5 + 3 :
+    row == 5 ? 14 + 7.5 + 5 + 3 + 2 :
     60;
 
 
@@ -210,7 +226,7 @@ module padPeg(offset) {
     zOff = padZOffset(offset);
     translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
     translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
-    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
+    //translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
 }
 
 
@@ -221,13 +237,14 @@ module bottomRowKeyWithHoles() {
             keybase();
 
             // extend key base
-            translate([50,0,0])cube([fullWhiteKeyLength-50,keyBaseWidth,2]);
-            translate([50,0,0])cube([fullWhiteKeyLength-50,2,10]);
-            translate([50,9,0])cube([fullWhiteKeyLength-50,2,10]);
-            translate([fullWhiteKeyLength, 0,0])cube([2,keyBaseWidth,10]);
+            translate([50,0,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,keyBaseWidth,2]);
+            translate([50,0,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,2,10]);
+            translate([50,9,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,2,10]);
+            translate([fullWhiteKeyLength + extraBottomRowLength, 0,0])cube([2,keyBaseWidth,10]);
 
-            translate([bottomPadOffset,0,0])pad();
+            //translate([bottomPadOffset,0,0])pad();
         }
+        translate([bottomPadOffset - interPadOffset * 0, 0,0])padPegHole();
         translate([bottomPadOffset - interPadOffset * 2, 0,0])padPegHole();
         translate([bottomPadOffset - interPadOffset * 4, 0,0])padPegHole();
     }
@@ -254,6 +271,7 @@ module topRowKeyWithHoles() {
 // TODO - these key modules are useful for visualizing - but I need to make them as keyWithHole plus pegs.
 module bottomRowKeyFilled() {
     bottomRowKeyWithHoles();
+    translate([bottomPadOffset - interPadOffset * (0 + 0), 0, -padZOffset(0)])mirror([0,0,0])padPeg(0);
     translate([bottomPadOffset - interPadOffset * (2 + 0), 0, -padZOffset(2)])mirror([0,0,0])padPeg(2);
     translate([bottomPadOffset - interPadOffset * (4 + 0), 0, -padZOffset(4)])mirror([0,0,0])padPeg(4);
 }
