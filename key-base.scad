@@ -139,9 +139,11 @@ module keybase(){
         //bridgeThinner = -0.1;
         // Trying anything to adjust the bridge was a mistake.  It catches on the pad.
         bridgeThinner = 0;
-        translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([5, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
-        translate([54 + 1 + 44, keyBaseWidth - 2 - bridgeThinner, bridgeHeightOffset])cube([5, 2 + bridgeThinner ,22 - bridgeHeightOffset]);
-        translate([54 + 1 + 44, 0,20])cube([5,keyBaseWidth,2]);
+        // The key length of the bridge (IE the width of the bridge part) was 5 on the original, but it has some fins that go forward that help the peg not catch on the key as it moves down in the corner between the bridge siding and the key bottom.  So I'm lengthening it to 8 so it can never snag.
+        bridgeFullContactLength = 8;
+        translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([bridgeFullContactLength, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
+        translate([54 + 1 + 44, keyBaseWidth - 2 - bridgeThinner, bridgeHeightOffset])cube([bridgeFullContactLength, 2 + bridgeThinner ,22 - bridgeHeightOffset]);
+        translate([54 + 1 + 44, 0,20])cube([bridgeFullContactLength,keyBaseWidth,2]);
     }
 
     module keywellCutout() {
