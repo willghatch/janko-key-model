@@ -10,6 +10,9 @@
 
 // The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.
 
+
+// TODO - I wrote this stupidly using X for the long direction of the key and Y for the skinny direction of the key, as if you are looking at one key on its side.  I should have used X for the dimension that the keyboard is long in instead.  This bit me when doing the key pad toppers due to text, though otherwise it doesn't really matter.  But... it could be changed...
+
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
 keyBaseWidth=11;
