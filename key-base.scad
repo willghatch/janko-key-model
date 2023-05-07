@@ -8,10 +8,35 @@
 // • These keys that have the same spring but a different sit-on-the-bed contact, it looks like they are SIMPLER -- eg. a big groove instead of tiny teeth.  So it should actually be a lot easier to design the contact point for them.
 // • The M-Audio Keystation 88es looks like it has similar keys, but also maybe the big groove.
 
-// The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.
+// The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.  This key shape may be a somewhat industry standard, or licensed to multiple companies, or some kind of whitelabel component.
 
 
 // TODO - I wrote this stupidly using X for the long direction of the key and Y for the skinny direction of the key, as if you are looking at one key on its side.  I should have used X for the dimension that the keyboard is long in instead.  This bit me when doing the key pad toppers due to text, though otherwise it doesn't really matter.  But... it could be changed...
+
+
+// coloring
+// I could do black & white like a piano, which would let me orient somewhat like a normal pianist.
+// Another possibility that I've considered is a 6 color scheme, where each key shares a color with one neighbor, IE each color appears once on each row, meaning that with color plus row (or color plus whether it's the left or the right) can distinctly identify a key.
+// Roy Pertchik has a tri-color scheme where the three diminished chords are colored differently.  This is interesting, but each color is then used for 4 notes, and I'm not sure how helpful it would be in orienting myself (eg. when first sitting down or playing a key at a distance), since there is no obvious start/break in the pattern (like there is with the uneven numbers of black/white notes).  However, I could see it being helpful in noticing patterns.  Eg. when playing in a major key of color 1, I might come to remember and note the colors of different scale degrees.  The colors will have a certain ordering, eg. say I do RGB, with C as red, C# as Green, D as blue, the fourth scale degree is one color back (blue in C) and the fifth is one color forward (green in C).  If I add pink for C (IE a different shade of red) then I can orient based on that, but see the patterns.  Maybe RGB, but with one light tone of each color to help with orientation - pink C, light green G, light blue F.
+// Decision: I will use tri-color RGB, except with pink C, maybe light green G and light blue F.
+
+// pad tops
+// After trying a print with braille, I'm not confident that it will be very useful to me.  An alternate idea I have is to have different textures to the keys: smooth, wavy horizontal, wavy vertical, maybe with two frequencies of waves, which gives 5 textures.  Maybe in addition I can have one key with a single horizontal or vertical line, giving 6 textures.  That means I can use each texture once on each row, and maybe on C/C# I do the single line, but to vertical on one and horizontal on the other.  But even if I stick to the idea of Braille, I need lower profile dots.  As it is, the pads are too rough.  It might work better if I had one of those resin stereolithography printers -- I think they can get much better resolution.  The key tops I've printed so far are rough and the bumps very course.  Another idea -- smooth, vertical line, horizontal line, diagonal one way, diagonal the other way, dot.  OR -- vertical, horizontal, and diagonal (3 orientations that match the 3 Roy Pertchik colors), plus 4 variations - single, double close, double wide, triple.
+// Decision: With RGB coloring, red keys get horizontal stripes, green keys get diagonal (top-left to bottom-right), blue keys get vertical stripes.
+
+// So the color and tactile layout is:
+// C - R (pink), single horizontal stripe
+// C# - G, 1D
+// D - B, 1V
+// D# - R, 2H
+// E - G, 2D
+// F - B (light?), 2V
+// F# - R, 2wH
+// G - G (light?), 2wD
+// G# - B, 2wV
+// A - R, 3H
+// A# - G, 3D
+// B - B, 3V
 
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
@@ -108,7 +133,7 @@ module keybase(){
         //////////// the back hook
         union() {
             translate([19,3.5,0])cube([2,4,14]);
-            //// Because the hook has an overhang, it tends to snag.  Now that I've added the bottom front hook, I'm not certain that the back hook is completely necessary.
+            //// Because the hook has an overhang, it tends to sag.  Now that I've added the bottom front hook, I'm not certain that the back hook is completely necessary.
             // hook overhang
             //translate([17,3.5,12])cube([2,4,2]);
             //// TODO - the hook can be wider.  It just has to bend a tiny bit.
