@@ -6,6 +6,7 @@
 // • The M-Audio Keystation 61es looks like it has the same keys, based on https://www.youtube.com/watch?v=rw7M5bsJpx8 (which shows dissasembly of the keystation 49e)
 // • The M-Audio Keystation Pro-88 looks like it has similar keys, but they have a different spring, and maybe 2 springs, but I can't tell for sure.  Definitely I would need a different model, but probably similar.  (From https://youtu.be/f-iIatuSr-s?t=56)
 // • These keys that have the same spring but a different sit-on-the-bed contact, it looks like they are SIMPLER -- eg. a big groove instead of tiny teeth.  So it should actually be a lot easier to design the contact point for them.
+// • The M-Audio Keystation 88es looks like it has similar keys, but also maybe the big groove.
 
 // The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.
 
@@ -36,6 +37,9 @@ padY = 22;
 padZ = 1;
 padFullX = padX;
 padFullY = padY;
+
+padTopHeight = 5;
+padAngle = - asin(padTopHeight / padX);
 
 bottomPadOffset = fullWhiteKeyLength - 10;
 interPadOffset = padFullX + 4;
@@ -198,6 +202,8 @@ module pad() {
     scale([padX/2,padY/2,1])cylinder(r=1, h=padZ, $fn=50, center=false);
 }
 
+
+
 module padPegHole() {
     // "centered" similar to pad.
     translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 2.5]);
@@ -283,6 +289,39 @@ module topRowKeyFilled() {
 }
 
 
+
+
+
+module padTop() {
+    // A topper for the pads of a Janko keyboard.
+    // I want the key tops to have an angle up toward the user, so that I can raise the back of the keyboard to make them flatter, but then pressing “down” will be pressing at an angle that is more favorable for the various raised keys.
+
+    // I've been using X and Y swapped from what I should have.  So... they are swapped in these pad-related things so text extrusion can work well.
+
+    intersection(){
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight*2, $fn=50, center=false);
+        //mirror([1,0,0])tprism(padX,padY,padTopHeight);
+        translate([padY,padX,0])rotate([0,0,90])tprism(padY,padX,padTopHeight);
+    }
+
+    // This is the rotation to get something on the level with the pad top
+    //rotate([0, padAngle, 0])cube([10,2,2]);
+}
+
+module padTop_text(s, offset, font, fontSize, s2="", offset2=[0,0,0]){
+    padTop();
+
+    // If only I could define a transformation...  for now I'll just copy paste this stuff because I don't this openscad is expressive enough to do what I want, according to things I have read.
+    color("green")
+    translate([0,0,padTopHeight]) rotate([padAngle,0,0]){
+        translate(offset) linear_extrude(0.7)
+            text(s, fontSize, font=font);
+        translate(offset2) linear_extrude(0.7)
+            text(s2, fontSize, font=font);
+    }
+}
+
+
 module demo() {
     // IE a function to visualize everything
     translate([0,(keyBaseWidth + 1) * -3, 0])padPeg(offset=1);
@@ -305,3 +344,5 @@ module demo() {
 //    padPegHole();
 //}
 //translate([10,50,0])padPeg(offset=2);
+
+//translate([0,-20,0])
