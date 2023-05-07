@@ -32,8 +32,9 @@ padHexCenterToEdge = 8;
 //padFullX = padX + padRoundExtra * 2;
 //padFullY = padY + padRoundExtra * 2;
 
+
 padX = 19;
-padY = 22;
+padY = 24;
 padZ = 1;
 padFullX = padX;
 padFullY = padY;
@@ -321,13 +322,56 @@ module padTop_text(s, offset, font, fontSize, s2="", offset2=[0,0,0]){
     }
 }
 
+function latinToBraille_upperSix(a) =
+    // IE using the upper six braille dots, which I think is the normal thing to do.
+    a == "A" ? "\u2801" :
+    a == "B" ? "\u2803" :
+    a == "C" ? "\u2809" :
+    a == "D" ? "\u2819" :
+    a == "E" ? "\u2811" :
+    a == "F" ? "\u280B" :
+    a == "G" ? "\u281B" :
+    "?";
+
+function latinToBraille_lowerSix(a) =
+    // IE using the lower six braille dots, which I think is the weird thing to do.
+    a == "A" ? "\u2802" :
+    a == "B" ? "\u2806" :
+    a == "C" ? "\u2812" :
+    a == "D" ? "\u2832" :
+    a == "E" ? "\u2822" :
+    a == "F" ? "\u2816" :
+    a == "G" ? "\u2836" :
+    "?";
+
+module padTop_braille(s, s2=""){
+    padTop_text(s=latinToBraille_lowerSix(s), s2=s2, fontSize=7, offset=[8.25,4,0], offset2=[7.75,7,0], font="DejaVu Sans");
+}
+
+module padTopSet() {
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_braille(s="A", s2="");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_braille(s="A", s2="^");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_braille(s="B", s2="");
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_braille(s="C", s2="");
+    translate([(padY + 3) * 4, (padX + 3) * 0,0])padTop_braille(s="C", s2="^");
+    translate([(padY + 3) * 5, (padX + 3) * 0,0])padTop_braille(s="D", s2="");
+    translate([(padY + 3) * 0, (padX + 3) * 1,0])padTop_braille(s="D", s2="^");
+    translate([(padY + 3) * 1, (padX + 3) * 1,0])padTop_braille(s="E", s2="");
+    translate([(padY + 3) * 2, (padX + 3) * 1,0])padTop_braille(s="F", s2="");
+    translate([(padY + 3) * 3, (padX + 3) * 1,0])padTop_braille(s="F", s2="^");
+    translate([(padY + 3) * 4, (padX + 3) * 1,0])padTop_braille(s="G", s2="");
+    translate([(padY + 3) * 5, (padX + 3) * 1,0])padTop_braille(s="G", s2="^");
+
+}
 
 module demo() {
     // IE a function to visualize everything
-    translate([0,(keyBaseWidth + 1) * -3, 0])padPeg(offset=1);
-    translate([0,(keyBaseWidth + 1) * -5, 0])padPeg(offset=2);
-    translate([0,(keyBaseWidth + 1) * -7, 0])padPeg(offset=3);
-    translate([0,(keyBaseWidth + 1) * -9, 0])padPeg(offset=4);
+    translate([0,(padY + 2) * -1, 0])padPeg(offset=0);
+    translate([0,(padY + 2) * -2, 0])padPeg(offset=1);
+    translate([0,(padY + 2) * -3, 0])padPeg(offset=2);
+    translate([0,(padY + 2) * -4, 0])padPeg(offset=3);
+    translate([0,(padY + 2) * -5, 0])padPeg(offset=4);
+    translate([0,(padY + 2) * -6, 0])padPeg(offset=5);
 
     translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
     translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
@@ -336,6 +380,8 @@ module demo() {
     translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKeyFilled();
     translate([0,(keyBaseWidth + 1) * 5,0])topRowKeyFilled();
     translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKeyFilled();
+
+    translate([40,-60,0])padTopSet();
 }
 //demo();
 
