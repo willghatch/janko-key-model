@@ -162,11 +162,13 @@ module keybase(){
         // There are 44mm between the original far-from-spring 1mm plunger and the bottom hook.
         // The bottom hook closes maybe 1mm beyond where the plungers extend.
         // This is a bit of a wide bridge, so hopefully it works.  I'm going to pull in each side by 0.5mm which I think I can fit.
-        bridgeHeightOffset = 5;
+        bridgeHeightOffset = keyWallWidth;
         // After trying to make the bridge 1mm thinner, the gap was too small and the key couldn't move freely.  If anything, I need to make the bridge wider...
         //bridgeThinner = -0.1;
         // Trying anything to adjust the bridge was a mistake.  It catches on the pad.
-        bridgeThinner = 0;
+        //bridgeThinner = 0;
+        // After trying to make the bridge go farther forward to stop it catching on the stopper on the way down, I'm realizing that it can catch on the back as well as the front.  The only real way to fix it is to make the bridge thinner, which the official keys actually do.  So... maybe I just need to find the right size where it can move freely but not catch.  The biggest danger here, I think, is that FDM printers print rough edges that might still catch or just be too rough.  I don't want a big process of sanding or finishing keys after printing.
+        bridgeThinner = 0.25;
         // The key length of the bridge (IE the width of the bridge part) was 5 on the original, but it has some fins that go forward that help the peg not catch on the key as it moves down in the corner between the bridge siding and the key bottom.  So I'm lengthening it to 8 so it can never snag.
         bridgeFullContactLength = 8;
         translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([bridgeFullContactLength, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
