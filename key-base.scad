@@ -342,10 +342,10 @@ module padTop() {
     //rotate([0, padAngle, 0])cube([10,2,2]);
 }
 
-module padTop_lineVertical(centerOffsetPercent){
+module padTop_lineVertical(centerOffset){
     intersection(){
         translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
-        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([centerOffset,0,0])
         translate([padY/2,padX,0])
         rotate([padAngle + 90,0,0]){
             cylinder(r=0.5, h=500, $fn=50, center=false);
@@ -353,13 +353,13 @@ module padTop_lineVertical(centerOffsetPercent){
     }
 }
 
-module padTop_lineHorizontal(centerOffsetPercent){
+module padTop_lineHorizontal(centerOffset){
     intersection(){
         translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
-        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([centerOffset,0,0])
         translate([padY/2,padX,0])
         rotate([padAngle + 90,0,0]){
-            translate([0,0,(centerOffsetPercent/100) * padTopHypotenuseLength/2])
+            translate([0,0,centerOffset])
             translate([0,0,padTopHypotenuseLength/2])
             rotate([0,90,0]){
                 cylinder(r=0.5, h=500, $fn=50, center=true);
@@ -368,13 +368,13 @@ module padTop_lineHorizontal(centerOffsetPercent){
     }
 }
 
-module padTop_lineDiagonal_leftTopToRightBottom(centerOffsetPercent){
+module padTop_lineDiagonal_leftTopToRightBottom(centerOffset){
     intersection(){
         translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
-        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([centerOffset,0,0])
         translate([padY/2,padX,0])
         rotate([padAngle + 90,0,0]){
-            translate([centerOffsetPercent * ((padY/2)/100),0,(centerOffsetPercent/100) * padTopHypotenuseLength/2])
+            translate([centerOffset,0,centerOffset])
             translate([0,0,padTopHypotenuseLength/2])
             rotate([0,45,0]){
                 cylinder(r=0.5, h=500, $fn=50, center=true);
@@ -395,35 +395,35 @@ module padTop_lined(note) {
     } else if (note == "D"){
         padTop_lineVertical(0);
     } else if (note == "D#"){
-        padTop_lineHorizontal(-7);
-        padTop_lineHorizontal(7);
+        padTop_lineHorizontal(-2);
+        padTop_lineHorizontal(2);
     } else if (note == "E"){
-        padTop_lineDiagonal_leftTopToRightBottom(-7);
-        padTop_lineDiagonal_leftTopToRightBottom(7);
+        padTop_lineDiagonal_leftTopToRightBottom(-2);
+        padTop_lineDiagonal_leftTopToRightBottom(2);
     } else if (note == "F"){
-        padTop_lineVertical(-7);
-        padTop_lineVertical(7);
+        padTop_lineVertical(-2);
+        padTop_lineVertical(2);
     } else if (note == "F#"){
-        padTop_lineHorizontal(-14);
-        padTop_lineHorizontal(14);
+        padTop_lineHorizontal(-4);
+        padTop_lineHorizontal(4);
     } else if (note == "G"){
-        padTop_lineDiagonal_leftTopToRightBottom(-14);
-        padTop_lineDiagonal_leftTopToRightBottom(14);
+        padTop_lineDiagonal_leftTopToRightBottom(-4);
+        padTop_lineDiagonal_leftTopToRightBottom(4);
     } else if (note == "G#"){
-        padTop_lineVertical(-14);
-        padTop_lineVertical(14);
+        padTop_lineVertical(-4);
+        padTop_lineVertical(4);
     } else if (note == "A"){
-        padTop_lineHorizontal(-14);
+        padTop_lineHorizontal(-4);
         padTop_lineHorizontal(0);
-        padTop_lineHorizontal(14);
+        padTop_lineHorizontal(4);
     } else if (note == "A#"){
-        padTop_lineDiagonal_leftTopToRightBottom(-14);
+        padTop_lineDiagonal_leftTopToRightBottom(-4);
         padTop_lineDiagonal_leftTopToRightBottom(0);
-        padTop_lineDiagonal_leftTopToRightBottom(14);
+        padTop_lineDiagonal_leftTopToRightBottom(4);
     } else if (note == "B"){
-        padTop_lineVertical(-14);
+        padTop_lineVertical(-4);
         padTop_lineVertical(0);
-        padTop_lineVertical(14);
+        padTop_lineVertical(4);
     } else {
         // Smooth top.
     }
