@@ -68,7 +68,8 @@ padFullX = padX;
 padFullY = padY;
 
 padTopHeight = 5;
-padAngle = - asin(padTopHeight / padX);
+padAngle = - atan(padTopHeight / padX);
+padTopHypotenuseLength = -padTopHeight / (sin(padAngle));
 
 bottomPadOffset = fullWhiteKeyLength - 10;
 interPadOffset = padFullX + 4;
@@ -341,6 +342,107 @@ module padTop() {
     //rotate([0, padAngle, 0])cube([10,2,2]);
 }
 
+module padTop_lineVertical(centerOffsetPercent){
+    intersection(){
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
+        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([padY/2,padX,0])
+        rotate([padAngle + 90,0,0]){
+            cylinder(r=0.5, h=500, $fn=50, center=false);
+        }
+    }
+}
+
+module padTop_lineHorizontal(centerOffsetPercent){
+    intersection(){
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
+        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([padY/2,padX,0])
+        rotate([padAngle + 90,0,0]){
+            translate([0,0,(centerOffsetPercent/100) * padTopHypotenuseLength/2])
+            translate([0,0,padTopHypotenuseLength/2])
+            rotate([0,90,0]){
+                cylinder(r=0.5, h=500, $fn=50, center=true);
+            }
+        }
+    }
+}
+
+module padTop_lineDiagonal_leftTopToRightBottom(centerOffsetPercent){
+    intersection(){
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
+        translate([centerOffsetPercent * ((padY/2)/100),0,0])
+        translate([padY/2,padX,0])
+        rotate([padAngle + 90,0,0]){
+            translate([centerOffsetPercent * ((padY/2)/100),0,(centerOffsetPercent/100) * padTopHypotenuseLength/2])
+            translate([0,0,padTopHypotenuseLength/2])
+            rotate([0,45,0]){
+                cylinder(r=0.5, h=500, $fn=50, center=true);
+            }
+        }
+    }
+}
+
+module padTop_lined(note) {
+    // Using my note tactile and color plan in comment at top.
+    // Empty string (or invalid string) for smooth top.
+    padTop();
+
+    if (note == "C"){
+        padTop_lineHorizontal(0);
+    } else if (note == "C#"){
+        padTop_lineDiagonal_leftTopToRightBottom(0);
+    } else if (note == "D"){
+        padTop_lineVertical(0);
+    } else if (note == "D#"){
+        padTop_lineHorizontal(-7);
+        padTop_lineHorizontal(7);
+    } else if (note == "E"){
+        padTop_lineDiagonal_leftTopToRightBottom(-7);
+        padTop_lineDiagonal_leftTopToRightBottom(7);
+    } else if (note == "F"){
+        padTop_lineVertical(-7);
+        padTop_lineVertical(7);
+    } else if (note == "F#"){
+        padTop_lineHorizontal(-14);
+        padTop_lineHorizontal(14);
+    } else if (note == "G"){
+        padTop_lineDiagonal_leftTopToRightBottom(-14);
+        padTop_lineDiagonal_leftTopToRightBottom(14);
+    } else if (note == "G#"){
+        padTop_lineVertical(-14);
+        padTop_lineVertical(14);
+    } else if (note == "A"){
+        padTop_lineHorizontal(-14);
+        padTop_lineHorizontal(0);
+        padTop_lineHorizontal(14);
+    } else if (note == "A#"){
+        padTop_lineDiagonal_leftTopToRightBottom(-14);
+        padTop_lineDiagonal_leftTopToRightBottom(0);
+        padTop_lineDiagonal_leftTopToRightBottom(14);
+    } else if (note == "B"){
+        padTop_lineVertical(-14);
+        padTop_lineVertical(0);
+        padTop_lineVertical(14);
+    } else {
+        // Smooth top.
+    }
+
+    // TODO...
+// C - R (pink), single horizontal stripe
+// C# - G, 1D
+// D - B, 1V
+// D# - R, 2H
+// E - G, 2D
+// F - B (light?), 2V
+// F# - R, 2wH
+// G - G (light?), 2wD
+// G# - B, 2wV
+// A - R, 3H
+// A# - G, 3D
+// B - B, 3V
+}
+
 module padTop_text(s, offset, font, fontSize, s2="", offset2=[0,0,0]){
     padTop();
 
@@ -381,18 +483,18 @@ module padTop_braille(s, s2=""){
 }
 
 module padTopSet() {
-    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_braille(s="A", s2="");
-    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_braille(s="A", s2="^");
-    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_braille(s="B", s2="");
-    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_braille(s="C", s2="");
-    translate([(padY + 3) * 4, (padX + 3) * 0,0])padTop_braille(s="C", s2="^");
-    translate([(padY + 3) * 5, (padX + 3) * 0,0])padTop_braille(s="D", s2="");
-    translate([(padY + 3) * 0, (padX + 3) * 1,0])padTop_braille(s="D", s2="^");
-    translate([(padY + 3) * 1, (padX + 3) * 1,0])padTop_braille(s="E", s2="");
-    translate([(padY + 3) * 2, (padX + 3) * 1,0])padTop_braille(s="F", s2="");
-    translate([(padY + 3) * 3, (padX + 3) * 1,0])padTop_braille(s="F", s2="^");
-    translate([(padY + 3) * 4, (padX + 3) * 1,0])padTop_braille(s="G", s2="");
-    translate([(padY + 3) * 5, (padX + 3) * 1,0])padTop_braille(s="G", s2="^");
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("A");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("A#");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("B");
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("C");
+    translate([(padY + 3) * 4, (padX + 3) * 0,0])padTop_lined("C#");
+    translate([(padY + 3) * 5, (padX + 3) * 0,0])padTop_lined("D");
+    translate([(padY + 3) * 0, (padX + 3) * 1,0])padTop_lined("D#");
+    translate([(padY + 3) * 1, (padX + 3) * 1,0])padTop_lined("E");
+    translate([(padY + 3) * 2, (padX + 3) * 1,0])padTop_lined("F");
+    translate([(padY + 3) * 3, (padX + 3) * 1,0])padTop_lined("F#");
+    translate([(padY + 3) * 4, (padX + 3) * 1,0])padTop_lined("G");
+    translate([(padY + 3) * 5, (padX + 3) * 1,0])padTop_lined("G#");
 
 }
 
@@ -417,10 +519,3 @@ module demo() {
 }
 //demo();
 
-//difference(){
-//    pad();
-//    padPegHole();
-//}
-//translate([10,50,0])padPeg(offset=2);
-
-//translate([0,-20,0])
