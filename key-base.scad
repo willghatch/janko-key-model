@@ -169,6 +169,7 @@ module keybase(){
         // Trying anything to adjust the bridge was a mistake.  It catches on the pad.
         //bridgeThinner = 0;
         // After trying to make the bridge go farther forward to stop it catching on the stopper on the way down, I'm realizing that it can catch on the back as well as the front.  The only real way to fix it is to make the bridge thinner, which the official keys actually do.  So... maybe I just need to find the right size where it can move freely but not catch.  The biggest danger here, I think, is that FDM printers print rough edges that might still catch or just be too rough.  I don't want a big process of sanding or finishing keys after printing.
+        // After using 0.25 bridgeThinner, it never catches on the way down, but on one of the two keys I printed it snags just enough to not raise back up 100% of the way (it gets to like 80-90%).  I think the only reasonable solution is some post-print polishing with eg. a very fine file to make it smoother.
         bridgeThinner = 0.25;
         // The key length of the bridge (IE the width of the bridge part) was 5 on the original, but it has some fins that go forward that help the peg not catch on the key as it moves down in the corner between the bridge siding and the key bottom.  So I'm lengthening it to 8 so it can never snag.
         bridgeFullContactLength = 8;
