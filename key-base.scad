@@ -6,7 +6,7 @@
 // • The M-Audio Keystation 61es looks like it has the same keys, based on https://www.youtube.com/watch?v=rw7M5bsJpx8 (which shows dissasembly of the keystation 49e)
 // • The M-Audio Keystation Pro-88 looks like it has similar keys, but they have a different spring, and maybe 2 springs, but I can't tell for sure.  Definitely I would need a different model, but probably similar.  (From https://youtu.be/f-iIatuSr-s?t=56)
 // • These keys that have the same spring but a different sit-on-the-bed contact, it looks like they are SIMPLER -- eg. a big groove instead of tiny teeth.  So it should actually be a lot easier to design the contact point for them.
-// • The M-Audio Keystation 88es looks like it has similar keys, but also maybe the big groove.
+// • The M-Audio Keystation 88es looks like it has similar keys, but also maybe the big groove.  From https://www.bustedgear.com/repair_M-Audio_keystation_usb_jack_2.html
 
 // The keys have a part that goes really low on the front, and it doesn't make any sense on this keyboard.  It looks like other keyboards have an extra contact on the front for aftertouch.  So they either re-used the key completely or re-used some component.  A “Hydrasynth” keyboard from this video (https://youtu.be/-6JpllyS1nA?t=487) looks like it has nearly the same keys but uses that lower part for aftertouch.  This key shape may be a somewhat industry standard, or licensed to multiple companies, or some kind of whitelabel component.
 
