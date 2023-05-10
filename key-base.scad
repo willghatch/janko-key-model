@@ -75,6 +75,8 @@ bottomPadOffset = fullWhiteKeyLength - 10;
 interPadOffset = padFullX + 4;
 //interPadOffset = padFullX + 0;
 
+behindHookBulgeWidth = 0.4;
+
 // prism taken from openscad user manual
 module prismBorrowed(l, w, h){
     polyhedron(//pt 0        1        2        3        4        5
@@ -170,12 +172,18 @@ module keybase(){
         //bridgeThinner = 0;
         // After trying to make the bridge go farther forward to stop it catching on the stopper on the way down, I'm realizing that it can catch on the back as well as the front.  The only real way to fix it is to make the bridge thinner, which the official keys actually do.  So... maybe I just need to find the right size where it can move freely but not catch.  The biggest danger here, I think, is that FDM printers print rough edges that might still catch or just be too rough.  I don't want a big process of sanding or finishing keys after printing.
         // After using 0.25 bridgeThinner, it never catches on the way down, but on one of the two keys I printed it snags just enough to not raise back up 100% of the way (it gets to like 80-90%).  I think the only reasonable solution is some post-print polishing with eg. a very fine file to make it smoother.
-        bridgeThinner = 0.25;
+        // Actually, I think rather than use a bridge thinner, I can instead make the gap wider around it.  There is at least a 2.5mm gap between keys, and this is exactly at a point where the keys are constrained to not jiggle.  I can make the keys bulge out by 0.5mm on each side behind the bridge so it can't snag and so it has enough room for the spring to pull it all the way back.  Then I won't need to do fine filing in a constrained space.
+        //bridgeThinner = 0.25;
+        bridgeThinner = 0;
         // The key length of the bridge (IE the width of the bridge part) was 5 on the original, but it has some fins that go forward that help the peg not catch on the key as it moves down in the corner between the bridge siding and the key bottom.  So I'm lengthening it to 8 so it can never snag.
         bridgeFullContactLength = 8;
         translate([54 + 1 + 44, 0, bridgeHeightOffset])cube([bridgeFullContactLength, 2 + bridgeThinner, 22 - bridgeHeightOffset]);
         translate([54 + 1 + 44, keyBaseWidth - 2 - bridgeThinner, bridgeHeightOffset])cube([bridgeFullContactLength, 2 + bridgeThinner ,22 - bridgeHeightOffset]);
         translate([54 + 1 + 44, 0,20])cube([bridgeFullContactLength,keyBaseWidth,2]);
+
+        // behind bridge bulge
+        translate([85,-behindHookBulgeWidth,0])cube([15,behindHookBulgeWidth,10]);
+        translate([85,11,0])cube([15,behindHookBulgeWidth,10]);
     }
 
     module keywellCutout() {
@@ -204,7 +212,11 @@ module keybase(){
         // TODO - this is unnecessary, it's probably there for their manufacturing process.  Maybe I should remove this hole.
         //translate([15,1.5,-0.01])cube([4,8,12]);
         // the cover goes just beyond this, eg. 5mm.  I should give probably ~10cm before any key.
-    }
+
+        // cutout behind front underside hook (bridge)
+        translate([87,11-2.1,2])cube([12,0.1 + behindHookBulgeWidth,10]);
+        translate([87,2-behindHookBulgeWidth,2])cube([12,0.1 + behindHookBulgeWidth,10]);
+    };
 
 }
 
@@ -278,9 +290,9 @@ module bottomRowKeyWithHoles() {
             keybase();
 
             // extend key base
-            translate([50,0,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,keyBaseWidth,2]);
-            translate([50,0,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,2,10]);
-            translate([50,9,0])cube([fullWhiteKeyLength-50 + extraBottomRowLength,2,10]);
+            translate([100,0,0])cube([fullWhiteKeyLength-100 + extraBottomRowLength,keyBaseWidth,2]);
+            translate([100,0,0])cube([fullWhiteKeyLength-100 + extraBottomRowLength,2,10]);
+            translate([100,9,0])cube([fullWhiteKeyLength-100 + extraBottomRowLength,2,10]);
             translate([fullWhiteKeyLength + extraBottomRowLength, 0,0])cube([2,keyBaseWidth,10]);
 
             //translate([bottomPadOffset,0,0])pad();
@@ -297,9 +309,9 @@ module topRowKeyWithHoles() {
         union(){
             keybase();
             // extend key base
-            translate([50,0,0])cube([fullWhiteKeyLength-50 - 15,keyBaseWidth,2]);
-            translate([50,0,0])cube([fullWhiteKeyLength-50 - 15,2,10]);
-            translate([50,9,0])cube([fullWhiteKeyLength-50 - 15,2,10]);
+            translate([100,0,0])cube([fullWhiteKeyLength-100 - 15,keyBaseWidth,2]);
+            translate([100,0,0])cube([fullWhiteKeyLength-100 - 15,2,10]);
+            translate([100,9,0])cube([fullWhiteKeyLength-100 - 15,2,10]);
             translate([fullWhiteKeyLength-15, 0,0])cube([2,keyBaseWidth,10]);
         }
         translate([bottomPadOffset - interPadOffset * 1, 0,0])padPegHole();
@@ -508,8 +520,8 @@ module demo() {
     translate([0,(padY + 2) * -5, 0])padPeg(offset=4);
     translate([0,(padY + 2) * -6, 0])padPeg(offset=5);
 
-    translate([0,(keyBaseWidth + 1) * 1,0])topRowKeyWithHoles();
-    translate([0,(keyBaseWidth + 1) * 2,0])bottomRowKeyWithHoles();
+    translate([0,(keyBaseWidth + 2) * 1,0])topRowKeyWithHoles();
+    translate([0,(keyBaseWidth + 2) * 2,0])bottomRowKeyWithHoles();
 
     translate([0,(keyBaseWidth + 1) * 3,0])topRowKeyFilled();
     translate([0,(keyBaseWidth + 1) * 4,0])bottomRowKeyFilled();
