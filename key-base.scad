@@ -198,7 +198,7 @@ module keybase(){
         translate([4.5,5.5,-extraZ])cylinder(h=4+extraZ, r=4.5, center=false, $fn=40);
 
         // Here is the angled part joining the inner and outer circles.
-        translate([5,5,5-0.01])cylinder(h=1.01, r1=4.5, r2=3, center=false, $fn=40);
+        translate([5,5,4-0.01])cylinder(h=1.01, r1=4.5, r2=3, center=false, $fn=40);
 
         // Now the cube part that goes to the end connecting the inner circle.
         translate([-1,2.5,-1])cube([6,6,12]);
