@@ -262,11 +262,11 @@ function padZOffset(row) =
     // Because I plan to put a ~5mm thick angled topper on each pad, that means that the top of the bottom part of the key will be higher than the top part of the lower row key by a bit extra that I need to factor in..
     // The farthest pads move about 10mm vertically
     row == 0 ? 5 :
-    row == 1 ? 14 : // This row still has a lot of vertical motion, so it need a big jump to clear.  Maybe this means I should actually have holes in all of them and raise even the bottom one a bit...
-    row == 2 ? 14 + 6.5 :
-    row == 3 ? 14 + 6.5 + 4 :
-    row == 4 ? 14 + 6.5 + 4 + 3 :
-    row == 5 ? 14 + 6.5 + 4 + 3 + 1 :
+    row == 1 ? 13.5 : // This row still has a lot of vertical motion, so it need a big jump to clear.  Maybe this means I should actually have holes in all of them and raise even the bottom one a bit...
+    row == 2 ? 13.5 + 6.5 :
+    row == 3 ? 13.5 + 6.5 + 4 :
+    row == 4 ? 13.5 + 6.5 + 4 + 3 :
+    row == 5 ? 13.5 + 6.5 + 4 + 3 + 1 :
     60;
 
 
