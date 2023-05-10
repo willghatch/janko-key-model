@@ -38,6 +38,9 @@
 // A# - G, 3D
 // B - B, 3V
 
+// 2023-05-10 - Fill - My latest design works great - I've been using 15% grid infill, which has worked fine, but I just tried 100% rectilinear infill for the base in hopes of having stronger tiny functional pieces (eg. the teeth where it rests by the spring), and it worked well.  I believe I will continue with low fill for the pegs and key toppers, but 100% fill for the key bases.
+
+
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
 keyBaseWidth=11;
