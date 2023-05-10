@@ -511,7 +511,29 @@ module padTopSet() {
     translate([(padY + 3) * 3, (padX + 3) * 1,0])padTop_lined("F#");
     translate([(padY + 3) * 4, (padX + 3) * 1,0])padTop_lined("G");
     translate([(padY + 3) * 5, (padX + 3) * 1,0])padTop_lined("G#");
+}
 
+module padTopsRed_noPink() {
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("A");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("D#");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("F#");
+    //translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("C");
+}
+module padTopsGreen() {
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("A#");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("C#");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("E");
+    // G maybe I should print in light green.
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("G");
+}
+module padTopsBlue() {
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("B");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("D");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("F");
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("G#");
+}
+module padTopsPink() {
+    padTop_lined("C");
 }
 
 module demo() {
