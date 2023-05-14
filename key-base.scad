@@ -500,6 +500,7 @@ module padTop_braille(s, s2=""){
 
 module rPadTop_lined(note) {
     // They print nicer when rotated on the side.  There is some extra support material needed, but the side prints so much smoother than the top, and removing the supports and sanding just a bit will still be a way nicer top when it's printed on the side than if it's printed upright (and still needs sanding anyway).
+    // ! Actually, now that I've tried gluing them on after printing and testing them a bit, I actually find that I prefer the ones printed flat.
     rotate([90,0,0]) padTop_lined(note);
 }
 
@@ -519,26 +520,26 @@ module padTopSet() {
 }
 
 module padTopsRed_noPink() {
-    translate([(padY + 3) * 0, (padX + 3) * 0,0])rPadTop_lined("A");
-    translate([(padY + 3) * 1, (padX + 3) * 0,0])rPadTop_lined("D#");
-    translate([(padY + 3) * 2, (padX + 3) * 0,0])rPadTop_lined("F#");
-    //translate([(padY + 3) * 3, (padX + 3) * 0,0])rPadTop_lined("C");
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("A");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("D#");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("F#");
+    //translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("C");
 }
 module padTopsGreen() {
-    translate([(padY + 3) * 0, (padX + 3) * 0,0])rPadTop_lined("A#");
-    translate([(padY + 3) * 1, (padX + 3) * 0,0])rPadTop_lined("C#");
-    translate([(padY + 3) * 2, (padX + 3) * 0,0])rPadTop_lined("E");
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("A#");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("C#");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("E");
     // G maybe I should print in light green.
-    translate([(padY + 3) * 3, (padX + 3) * 0,0])rPadTop_lined("G");
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("G");
 }
 module padTopsBlue() {
-    translate([(padY + 3) * 0, (padX + 3) * 0,0])rPadTop_lined("B");
-    translate([(padY + 3) * 1, (padX + 3) * 0,0])rPadTop_lined("D");
-    translate([(padY + 3) * 2, (padX + 3) * 0,0])rPadTop_lined("F");
-    translate([(padY + 3) * 3, (padX + 3) * 0,0])rPadTop_lined("G#");
+    translate([(padY + 3) * 0, (padX + 3) * 0,0])padTop_lined("B");
+    translate([(padY + 3) * 1, (padX + 3) * 0,0])padTop_lined("D");
+    translate([(padY + 3) * 2, (padX + 3) * 0,0])padTop_lined("F");
+    translate([(padY + 3) * 3, (padX + 3) * 0,0])padTop_lined("G#");
 }
 module padTopsPink() {
-    rPadTop_lined("C");
+    padTop_lined("C");
 }
 
 module demo() {
