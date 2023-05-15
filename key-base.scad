@@ -266,7 +266,7 @@ function padZOffset(row) =
     // The farthest pads move about 10mm vertically
     row == 0 ? 5 :
     row == 1 ? 13.5 : // This row still has a lot of vertical motion, so it need a big jump to clear.  Maybe this means I should actually have holes in all of them and raise even the bottom one a bit...
-    row == 2 ? 13.5 + 7 :
+    row == 2 ? 13.5 - 0.3 + 7 :
     row == 3 ? 13.5 + 7 + 5 :
     row == 4 ? 13.5 + 7 + 5 + 3 :
     row == 5 ? 13.5 + 7 + 5 + 3 + 1 :
