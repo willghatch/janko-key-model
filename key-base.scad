@@ -548,8 +548,8 @@ module padTopGlueGuide() {
     scale(1.01){
         difference(){
             sideSize = 2;
-            cube([padY + sideSize*2, padX/2 + sideSize, 5]);
-            translate([padY/2 + sideSize, 0, -0.01])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight*2, $fn=50, center=false);
+            cube([padY + sideSize*2, padX/2 + sideSize, 40]);
+            translate([padY/2 + sideSize, 0, -0.01])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight*2*100, $fn=50, center=false);
             // I don't want it to be a little less than half of the key space.  Thus this extra cube I'm cutting off.
             //translate([-0.01, -0.01, -0.01])cube([100,padX/16,100]);
         }
