@@ -13,6 +13,8 @@
 
 // TODO - I wrote this stupidly using X for the long direction of the key and Y for the skinny direction of the key, as if you are looking at one key on its side.  I should have used X for the dimension that the keyboard is long in instead.  This bit me when doing the key pad toppers due to text, though otherwise it doesn't really matter.  But... it could be changed...
 
+// TODO - I printed them and assembled them, but putting the pegs in was overly difficult.  I should at least scale the peg to 99% or something if I print more in the future.  Better yet, design it so that it can't go in rotated a quarter turn as well, and make it fit easier.  I ultimately super glued everything together anyway, it might as well be easier to assemble.
+
 
 // coloring
 // I could do black & white like a piano, which would let me orient somewhat like a normal pianist.
@@ -24,19 +26,21 @@
 // After trying a print with braille, I'm not confident that it will be very useful to me.  An alternate idea I have is to have different textures to the keys: smooth, wavy horizontal, wavy vertical, maybe with two frequencies of waves, which gives 5 textures.  Maybe in addition I can have one key with a single horizontal or vertical line, giving 6 textures.  That means I can use each texture once on each row, and maybe on C/C# I do the single line, but to vertical on one and horizontal on the other.  But even if I stick to the idea of Braille, I need lower profile dots.  As it is, the pads are too rough.  It might work better if I had one of those resin stereolithography printers -- I think they can get much better resolution.  The key tops I've printed so far are rough and the bumps very course.  Another idea -- smooth, vertical line, horizontal line, diagonal one way, diagonal the other way, dot.  OR -- vertical, horizontal, and diagonal (3 orientations that match the 3 Roy Pertchik colors), plus 4 variations - single, double close, double wide, triple.
 // Decision: With RGB coloring, red keys get horizontal stripes, green keys get diagonal (top-left to bottom-right), blue keys get vertical stripes.
 
-// So the color and tactile layout is:
-// C - R (pink), single horizontal stripe
-// C# - G, 1D
-// D - B, 1V
-// D# - R, 2H
-// E - G, 2D
-// F - B (light?), 2V
-// F# - R, 2wH
-// G - G (light?), 2wD
-// G# - B, 2wV
-// A - R, 3H
-// A# - G, 3D
-// B - B, 3V
+// Rows: photos of old looking Janko keyboards seem to typically have C on the bottom row.  This doesn't matter much, but I'll be consistent with the old ones.
+
+// So the color, tactile layout, and row is:
+// C - R (pink), single horizontal stripe, bottom row
+// C# - G, 1D, top row
+// D - B, 1V, bottom row
+// D# - R, 2H, top row
+// E - G, 2D, bottom row
+// F - B (light?), 2V, top row
+// F# - R, 2wH, bottom row
+// G - G (light?), 2wD, top row
+// G# - B, 2wV, bottom row
+// A - R, 3H, top row
+// A# - G, 3D, bottom row
+// B - B, 3V, top row
 
 // 2023-05-10 - Fill - My latest design works great - I've been using 15% grid infill, which has worked fine, but I just tried 100% rectilinear infill for the base in hopes of having stronger tiny functional pieces (eg. the teeth where it rests by the spring), and it worked well.  I believe I will continue with low fill for the pegs and key toppers, but 100% fill for the key bases.
 
