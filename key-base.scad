@@ -45,6 +45,11 @@
 // 2023-05-10 - Fill - My latest design works great - I've been using 15% grid infill, which has worked fine, but I just tried 100% rectilinear infill for the base in hopes of having stronger tiny functional pieces (eg. the teeth where it rests by the spring), and it worked well.  I believe I will continue with low fill for the pegs and key toppers, but 100% fill for the key bases.
 
 
+include <Round-Anything/MinkowskiRound.scad>
+
+
+doPadBlunting = true;
+
 // The key base needs to be 110mm long to go past the stopper.
 keyBaseLength=110;
 keyBaseWidth=11;
@@ -77,6 +82,7 @@ padFullY = padY;
 padTopHeight = 5;
 padAngle = - atan(padTopHeight / padX);
 padTopHypotenuseLength = -padTopHeight / (sin(padAngle));
+padTopPegHeight = 1.2;
 
 bottomPadOffset = fullWhiteKeyLength - 10;
 interPadOffset = padFullX + 4;
@@ -278,15 +284,21 @@ function padZOffset(row) =
 
 
 module padPeg(offset) {
-    // "centered" similar to pad.
+  // "centered" similar to pad.
 
-    // The top key of a previous print only moves down by ~4mm when depressed, but moves forward ~5mm.
-    //color("green")
-    pad();
-    zOff = padZOffset(offset);
-    translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
-    translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
-    //translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
+  // The top key of a previous print only moves down by ~4mm when depressed, but moves forward ~5mm.
+  //color("green")
+  difference(){
+    union(){
+      pad();
+      zOff = padZOffset(offset);
+      translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
+      translate([((padFullX - pegSize) / 2), keyWallWidth, 0])scale([0.98, 0.98, 1])cube([pegSize,pegSize, zOff + 2]);
+      //translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
+    }
+    //translate([padX/2,keyBaseWidth/2,0])
+    translate([((padX - pegSize)/2), ((keyBaseWidth - pegSize)/2), -0.01])cube([pegSize * 0.98, pegSize * 0.98, padTopPegHeight]);
+  }
 }
 
 
@@ -346,7 +358,7 @@ module topRowKeyFilled() {
 
 
 
-module padTop() {
+module padTop_sharp() {
     // A topper for the pads of a Janko keyboard.
     // I want the key tops to have an angle up toward the user, so that I can raise the back of the keyboard to make them flatter, but then pressing “down” will be pressing at an angle that is more favorable for the various raised keys.
 
@@ -361,10 +373,30 @@ module padTop() {
     // This is the rotation to get something on the level with the pad top
     //rotate([0, padAngle, 0])cube([10,2,2]);
 }
+module padTop() {
+  difference(){
+  if(doPadBlunting) {
+    union(){
+      minkowskiOutsideRound(0.5, 0.5, $fn=5)padTop_sharp();
+      // this minkowski rounding takes off a bunch of the thin end of the pad, which I would rather keep.  It doesn't matter that it's sharp there.
+      intersection(){
+        padTop_sharp();
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight/5.5, $fn=50, center=false);
+      }
+    }
+  } else {
+    padTop_sharp();
+  }
+  // Carve out a peg hole
+  translate([((padY - pegSize)/2), (padX - pegSize)/2, -0.01])cube([pegSize, pegSize, padTopPegHeight]);
+  }
+}
 
 module padTop_lineVertical(centerOffset){
     intersection(){
         translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight, $fn=50, center=false);
+        // This line instead of the above bounds it a little better with rounding, but frankly I think I just want a different tactile system.
+        //translate([padY/2, padX/2, 0])scale([(padY - 3)/2,(padX - 3)/2,1])cylinder(r=1, h=padTopHeight - 0.5, $fn=50, center=false);
         translate([centerOffset,0,0])
         translate([padY/2,padX,0])
         rotate([padAngle + 90,0,0]){
@@ -546,18 +578,9 @@ module padTopsPink() {
     padTop_lined("C");
 }
 
-module padTopGlueGuide() {
-    // IE a little guide to hold against a key peg and pad top to place correctly while gluing.
-    // Probably I'll scale it just slightly so the fit isn't super tight.
-    scale(1.01){
-        difference(){
-            sideSize = 2;
-            cube([padY + sideSize*2, padX/2 + sideSize, 40]);
-            translate([padY/2 + sideSize, 0, -0.01])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight*2*100, $fn=50, center=false);
-            // I don't want it to be a little less than half of the key space.  Thus this extra cube I'm cutting off.
-            //translate([-0.01, -0.01, -0.01])cube([100,padX/16,100]);
-        }
-    }
+
+module padTopPlacementPeg() {
+  scale(0.98)cube([pegSize, pegSize, padTopPegHeight*2]);
 }
 
 module demo() {
@@ -578,6 +601,8 @@ module demo() {
     translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKeyFilled();
 
     translate([40,-60,0])padTopSet();
+
+    translate([50, -80, 0])padTopPlacementPeg();
 }
 //demo();
 
