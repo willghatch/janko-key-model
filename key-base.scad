@@ -60,6 +60,7 @@ pegSize = keyBaseWidth - 4;
 fullWhiteKeyLength=160;
 extraBottomRowLength=pegSize/2;
 userAreaOffset=fullWhiteKeyLength - 135;
+pegScale = 0.99;
 
 
 padRoundExtra = 2;
@@ -293,11 +294,11 @@ module padPeg(offset) {
       pad();
       zOff = padZOffset(offset);
       translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
-      translate([((padFullX - pegSize) / 2), keyWallWidth, 0])scale([0.98, 0.98, 1])cube([pegSize,pegSize, zOff + 2]);
+      translate([((padFullX - pegSize) / 2), keyWallWidth, 0])scale([pegScale, pegScale, 1])cube([pegSize,pegSize, zOff + 2]);
       //translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
     }
     //translate([padX/2,keyBaseWidth/2,0])
-    translate([((padX - pegSize)/2), ((keyBaseWidth - pegSize)/2), -0.01])cube([pegSize * 0.98, pegSize * 0.98, padTopPegHeight]);
+    translate([((padX - pegSize)/2), ((keyBaseWidth - pegSize)/2), -0.01])cube([pegSize * pegScale, pegSize * pegScale, padTopPegHeight]);
   }
 }
 
@@ -377,11 +378,11 @@ module padTop() {
   difference(){
   if(doPadBlunting) {
     union(){
-      minkowskiOutsideRound(0.5, 0.5, $fn=5)padTop_sharp();
+      minkowskiOutsideRound(1, 1, $fn=15)padTop_sharp();
       // this minkowski rounding takes off a bunch of the thin end of the pad, which I would rather keep.  It doesn't matter that it's sharp there.
       intersection(){
         padTop_sharp();
-        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight/5.5, $fn=50, center=false);
+        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight * 0.4, $fn=50, center=false);
       }
     }
   } else {
@@ -580,7 +581,7 @@ module padTopsPink() {
 
 
 module padTopPlacementPeg() {
-  scale(0.98)cube([pegSize, pegSize, padTopPegHeight*2]);
+  scale(pegScale)cube([pegSize, pegSize, padTopPegHeight*1.2]);
 }
 
 module demo() {
@@ -601,6 +602,8 @@ module demo() {
     translate([0,(keyBaseWidth + 1) * 6,0])bottomRowKeyFilled();
 
     translate([40,-60,0])padTopSet();
+
+    translate([70,-90,0])padTop();
 
     translate([50, -80, 0])padTopPlacementPeg();
 }
