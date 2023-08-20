@@ -8,3 +8,7 @@ stl/%.stl: %.scad stl
 
 stl:
 	mkdir -p stl
+
+.PHONY: clean
+clean:
+	rm -rf stl
