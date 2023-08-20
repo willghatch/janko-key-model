@@ -373,9 +373,24 @@ module padTop_sharp() {
     // This is the rotation to get something on the level with the pad top
     //rotate([0, padAngle, 0])cube([10,2,2]);
 }
+module padTop_sideCarveOut(){
+  color("red")translate([-3,5,5])rotate([0,-10,0])rotate([10,0,0])cube([40,20,5], center=true);
+  color("orange")translate([-3,5,5])rotate([0,-10,0])rotate([5,0,0])cube([40,20,5], center=true);
+  color("blue")translate([-3,5,5.27])rotate([0,-7,0])rotate([5,0,0])cube([40,20,5], center=true);
+  color("green")translate([-3,5,5])rotate([0,-15,0])rotate([20,0,0])cube([40,20,5], center=true);
+}
 module padTop() {
   difference(){
     padTop_sharp();
+    // Carve out some rectangles to smooth out the pad so the angles are obtuse and don't hurt fingers.
+    color("purple")translate([20,0,5.8])rotate([35,0,0])cube([40,10,5], center=true);
+    color("blue")translate([20,0,5.7])rotate([27,0,0])cube([40,10,5], center=true);
+    color("green")translate([20,0.7,6])rotate([10,0,0])cube([40,10,5], center=true);
+    color("red")translate([20,0,6.2])rotate([3,0,0])cube([40,10,5], center=true);
+    color("orange")translate([20,12,5.8])rotate([-4,0,0])cube([40,20,5], center=true);
+    // Carve out more rectangles for the sides
+    padTop_sideCarveOut();
+    translate([padY/2,0,0])mirror([1,0,0])translate([-padY/2,0,0])padTop_sideCarveOut();
     // Carve out a peg hole
     translate([((padY - pegSize)/2), (padX - pegSize)/2, -0.01])cube([pegSize, pegSize, padTopPegHeight]);
   }
