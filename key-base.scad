@@ -45,7 +45,6 @@
 // 2023-05-10 - Fill - My latest design works great - I've been using 15% grid infill, which has worked fine, but I just tried 100% rectilinear infill for the base in hopes of having stronger tiny functional pieces (eg. the teeth where it rests by the spring), and it worked well.  I believe I will continue with low fill for the pegs and key toppers, but 100% fill for the key bases.
 
 
-include <Round-Anything/MinkowskiRound.scad>
 
 
 doPadBlunting = true;
@@ -376,20 +375,9 @@ module padTop_sharp() {
 }
 module padTop() {
   difference(){
-  if(doPadBlunting) {
-    union(){
-      minkowskiOutsideRound(1, 1, $fn=15)padTop_sharp();
-      // this minkowski rounding takes off a bunch of the thin end of the pad, which I would rather keep.  It doesn't matter that it's sharp there.
-      intersection(){
-        padTop_sharp();
-        translate([padY/2, padX/2, 0])scale([padY/2,padX/2,1])cylinder(r=1, h=padTopHeight * 0.4, $fn=50, center=false);
-      }
-    }
-  } else {
     padTop_sharp();
-  }
-  // Carve out a peg hole
-  translate([((padY - pegSize)/2), (padX - pegSize)/2, -0.01])cube([pegSize, pegSize, padTopPegHeight]);
+    // Carve out a peg hole
+    translate([((padY - pegSize)/2), (padX - pegSize)/2, -0.01])cube([pegSize, pegSize, padTopPegHeight]);
   }
 }
 
