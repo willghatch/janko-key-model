@@ -59,7 +59,7 @@ pegSize = keyBaseWidth - 4;
 fullWhiteKeyLength=160;
 extraBottomRowLength=pegSize/2;
 userAreaOffset=fullWhiteKeyLength - 135;
-pegScale = 0.98;
+pegScale = 0.97;
 
 
 padRoundExtra = 2;
