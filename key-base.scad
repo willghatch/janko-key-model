@@ -266,7 +266,7 @@ module pad() {
 
 module padPegHole() {
     // "centered" similar to pad.
-    translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 2.5]);
+    translate([((padFullX - pegSize) / 2), keyWallWidth, -0.25])cube([pegSize,pegSize, 4]);
 }
 
 function padZOffset(row) =
