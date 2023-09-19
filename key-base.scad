@@ -59,7 +59,7 @@ pegSize = keyBaseWidth - 4;
 fullWhiteKeyLength=160;
 extraBottomRowLength=pegSize/2;
 userAreaOffset=fullWhiteKeyLength - 135;
-pegScale = 0.97;
+pegScale = 0.95;
 
 
 padRoundExtra = 2;
@@ -584,7 +584,8 @@ module padTopsPink() {
 
 
 module padTopPlacementPeg() {
-  scale(pegScale)cube([pegSize, pegSize, padTopPegHeight*1.2]);
+  // Only use a fraction of the peg height.  I want to use more than 1 in case there is now bowing where there is bridging... but typically bridging fills a lot of space and makes the two holes have little room.
+  scale(pegScale)cube([pegSize, pegSize, padTopPegHeight*1.1]);
 }
 
 module demo() {
