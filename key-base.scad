@@ -293,7 +293,7 @@ module padPeg(offset) {
       pad();
       zOff = padZOffset(offset);
       translate([((padFullX - 12) / 2), 0, 0])cube([12,keyBaseWidth, zOff]);
-      translate([((padFullX - pegSize) / 2), keyWallWidth, 0])scale([pegScale, pegScale, 1])cube([pegSize,pegSize, zOff + 2]);
+      translate([((padFullX - pegSize + (1-pegScale)*pegSize) / 2), keyWallWidth + ((1-pegScale)*pegSize)/2, 0])scale([pegScale, pegScale, 1])cube([pegSize,pegSize, zOff + 2]);
       //translate([((padFullX - pegSize) / 2), keyWallWidth, 0])cube([pegSize,pegSize, zOff + 2]);
     }
     //translate([padX/2,keyBaseWidth/2,0])
