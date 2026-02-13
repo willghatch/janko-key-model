@@ -61,6 +61,8 @@ extraBottomRowLength=pegSize/2;
 userAreaOffset=fullWhiteKeyLength - 135;
 pegScale = 0.92;
 
+// Note, from the back of the key, where it holds the spring, to where the original black keys bump up (IE clearance for the case), it is about 22mm.  But the leverage at that point is really poor, so I put the top row of pads farther away to have better leverage.
+
 
 padRoundExtra = 2;
 padHexCenterToEdge = 8;
